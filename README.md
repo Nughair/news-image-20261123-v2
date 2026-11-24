@@ -15,7 +15,7 @@ Entry for the make.fun competition `news-image-20261123`
 
 | File | What it is |
 |------|-----------|
-| `entry.png` | The approved front page — 1024×1024, 229,873 bytes, sha256 `407d277ff3ed6ba9f16bf3effcfcf4df4e4661c659202efcdb91464caa12a982` |
+| `entry.png` | The approved front page (v2) — 1024×1024, 230,469 bytes, sha256 `3fb96cae4dde536d3816662eafa3aaf4e535cbfa05214b5ea6b2dba7a406176e` |
 | `generate_ni23.py` | The Python (Pillow) generator that renders `entry.png` deterministically — all artwork is drawn in code, no photographs |
 | `main.ts` | Entrypoint for the grading harness (Node, stdlib only): runs the true Python build when available, else emits the committed `entry.png` |
 | `STORIES.md` | The 36-story audit: every story with its source, REPORTED / CLAIM / FORECAST label, and the timing disclosures |

@@ -164,7 +164,7 @@ STATS = [
     ("22", "HORMUZ ATTACKS IN NOVEMBER"),
     ("99%", "OF GAZA AT CONTAMINATION RISK"),
     ("24", "DEAD IN CIKANDE FACTORY FIRE"),
-    ("$61,300", "BITCOIN BACK ABOVE $60,000"),
+    ("$61,417", "BITCOIN BACK ABOVE $60,000"),
 ]
 
 # (name, count, colour) — counts are the true tally of the 36 stories.
@@ -278,20 +278,20 @@ BRIEFS = [
     (20, "Anthropic shares rise after $81bn IPO", "Investopedia", None),
     (21, "Clayton to double as acting cyber chief", "Axios", None),
     (22, "Pentagon pressed over NSA deaths", "Legion", None),
-    (23, "FedEx pilot of 1994 rescue dies at 82", "GEORGE", None),
+    (23, "FedEx pilot of 1994 rescue dies at 82", "", None),
     (24, "Zelenskyy: free paid-for Patriots", "Reuters", None),
     (25, "Warsaw: Poland will not invoke Article 4", "RMF24", None),
     (26, "Gripen held fire over Poland", "Reuters", None),
     (27, "MP: Iran stops 10 tankers a day", "IRNA", "CLAIM"),
-    (28, "Libya: Merkury was refuelling under deal", "CNN", None),
+    (28, "Libya: Merkury refuelling under deal", "CNN", None),
     (29, "New reports detail Epstein's Russia links", "Nexus", None),
     (30, "Tokyo: Asia tech sell-off eases", "Morningstar", None),
     (31, "Zverev ends year as world No. 1 despite loss", "Times", None),
     (32, "NYC storm for Thanksgiving", "NOAA", "FORECAST"),
-    (33, "California: high tides and rain hit Monday", "GEORGE", None),
+    (33, "California: high tides and rain hit Monday", "", None),
     (34, "Bengals at Commanders tonight", "ESPN", "FORECAST"),
     (35, "Brentford v Everton", "Sportradar", "FORECAST"),
-    (36, "Tripoli voices 'grave concern' over ports", "WSJ", None),
+    (36, "Tripoli: 'grave concern' over ports", "WSJ", None),
 ]
 
 DATE_CHECK = (
@@ -310,24 +310,31 @@ FOOTER = ("Every story here happened, or was first reported, on Monday "
 
 # ------------------------------------------------------------------ scenes
 def scene_cop31(x, y, w, h):
-    """Dawn sky, sun rising, long conference table with delegates —
-    and an empty chair where the deal should be."""
+    """Dawn sky with the sun clear of the horizon, a flat sea band,
+    long conference table with delegates — and one clearly visible
+    empty chair where the deal should be. (v2: the sun no longer
+    touches the headland and the delegates' heads sit in the sky,
+    not across the sea band.)"""
     for i in range(h):
         t = i / h
         c = tuple(int(SKY_DAWN[j] * (1 - t) + SKY_DAY[j] * t) for j in range(3))
         d.line([x, y + i, x + w, y + i], fill=c)
-    # sun low on the horizon, right of centre
-    sx, sy, sr = x + w * 0.66, y + h * 0.52, h * 0.30
+    # sun high in the sky, right of centre — fully clear of the sea
+    sx, sy, sr = x + w * 0.68, y + h * 0.27, h * 0.16
     d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=(255, 214, 90))
     d.ellipse([sx - sr * 0.72, sy - sr * 0.72, sx + sr * 0.72, sy + sr * 0.72],
               fill=(255, 228, 130))
-    # distant headland + sea band
-    d.polygon([(x, y + h * 0.62), (x + w * 0.2, y + h * 0.52),
-               (x + w * 0.42, y + h * 0.62), (x + w, y + h * 0.62)],
+    # low headland silhouette on the left only, then one flat sea band
+    d.polygon([(x, y + h * 0.60), (x + w * 0.16, y + h * 0.53),
+               (x + w * 0.34, y + h * 0.60), (x + w * 0.40, y + h * 0.60),
+               (x + w * 0.40, y + h * 0.66), (x, y + h * 0.66)],
               fill=(110, 130, 140))
-    d.rectangle([x, y + h * 0.62, x + w, y + h * 0.70], fill=SEA)
-    # conference table (perspective slab) and delegates
-    ty = y + h * 0.82
+    d.rectangle([x, y + h * 0.60, x + w, y + h * 0.72], fill=SEA)
+    d.line([x, y + h * 0.60, x + w, y + h * 0.60], fill=(210, 226, 238),
+           width=1)
+    # conference table (perspective slab) and delegates; the delegates
+    # are shorter than in v1 so their heads stay in the sky zone
+    ty = y + h * 0.84
     d.polygon([(x + w * 0.06, ty), (x + w * 0.94, ty),
                (x + w * 0.88, y + h), (x + w * 0.12, y + h)],
               fill=(96, 62, 34))
@@ -337,12 +344,16 @@ def scene_cop31(x, y, w, h):
             (120, 120, 40), (160, 90, 40), (60, 130, 110)]
     for i, c in enumerate(cols):
         fx = x + w * (0.12 + 0.065 * i)
-        person(fx, ty - 2, h * 0.34, c)
-    # one empty chair at the head of the table — the missing deal
-    ex = x + w * 0.88
-    d.rectangle([ex - 7, ty - 26, ex + 7, ty - 2], outline=(60, 40, 24),
-                width=2)
-    d.line([ex - 7, ty - 14, ex + 7, ty - 14], fill=(60, 40, 24), width=2)
+        person(fx, ty - 2, h * 0.26, c)
+    # one empty chair at the head of the table — the missing deal.
+    # Cream-filled with a dark outline so it reads at a glance against
+    # the brown table (v1's thin brown outline on brown did not).
+    ex = x + w * 0.895
+    d.rectangle([ex - 10, ty - 36, ex + 10, ty - 2], fill=(243, 236, 216),
+                outline=(40, 28, 16), width=3)
+    d.line([ex - 10, ty - 20, ex + 10, ty - 20], fill=(40, 28, 16), width=2)
+    d.rectangle([ex - 13, ty - 4, ex + 13, ty - 1], fill=(243, 236, 216),
+                outline=(40, 28, 16), width=2)
     # torn paper sheet on the table — the rejected text
     d.polygon([(x + w * 0.44, ty + 4), (x + w * 0.56, ty + 4),
                (x + w * 0.545, y + h - 4), (x + w * 0.455, y + h - 4)],
@@ -397,56 +408,92 @@ def scene_nato(x, y, w, h):
                     outline=(200, 200, 200))
         d.line([fx + 2, ty - 16, fx + 2, ty - 2], fill=(200, 200, 200),
                width=1)
-    cols = [(220, 220, 220), (200, 200, 210), (210, 210, 200),
-            (230, 225, 215), (205, 205, 205)]
+    # delegates in saturated suit colours with a pale halo pass behind
+    # each figure — v1's pale greys washed out against the mid-blue wall
+    cols = [(178, 24, 32), (44, 128, 74), (196, 116, 30), (104, 62, 140),
+            (30, 128, 128)]
     for i, c in enumerate(cols):
         fx = x + w * (0.16 + 0.17 * i)
+        person(fx, ty - 2, h * 0.325, (238, 240, 246))
         person(fx, ty - 2, h * 0.30, c)
 
 
 def scene_libya(x, y, w, h):
-    """Night harbour at Benghazi: warship ablaze, drone boats closing in."""
-    d.rectangle([x, y, x + w, y + h], fill=(14, 18, 40))
-    # stars + moon
-    for i in range(40):
-        px = x + (i * 71) % int(w)
-        py = y + (i * 41) % int(h * 0.45)
-        d.point((px, py), fill=(220, 224, 240))
-    d.ellipse([x + w * 0.86, y + h * 0.08, x + w * 0.93, y + h * 0.08 + w * 0.07],
-              fill=(232, 232, 210))
-    # sea with moonlight band
-    d.rectangle([x, y + h * 0.66, x + w, y + h], fill=(24, 48, 84))
-    d.rectangle([x + w * 0.80, y + h * 0.66, x + w * 0.96, y + h],
-                fill=(60, 90, 130))
-    # warship (Merkury) centre-right, listing, on fire
-    sx = x + w * 0.52
-    sy = y + h * 0.62
-    d.polygon([(sx, sy), (sx + w * 0.34, sy), (sx + w * 0.30, sy + h * 0.10),
-               (sx + w * 0.04, sy + h * 0.10)], fill=(52, 58, 66))
-    d.rectangle([sx + w * 0.10, sy - h * 0.16, sx + w * 0.20, sy],
-                fill=(70, 76, 84))
-    d.rectangle([sx + w * 0.22, sy - h * 0.10, sx + w * 0.26, sy],
-                fill=(70, 76, 84))
-    d.line([sx + w * 0.15, sy - h * 0.16, sx + w * 0.15, sy - h * 0.26],
-           fill=(90, 96, 104), width=2)
-    # fireball + smoke over the ship
-    fx, fy = sx + w * 0.16, sy - h * 0.22
-    d.ellipse([fx - 16, fy - 12, fx + 16, fy + 12], fill=(255, 170, 50))
-    d.ellipse([fx - 9, fy - 7, fx + 9, fy + 7], fill=(255, 220, 120))
-    d.polygon([(fx - 10, fy - 8), (fx, fy - 26), (fx + 10, fy - 8)],
+    """Night harbour at Benghazi: a big warship ablaze, drone boats
+    closing in. (v2: the sea starts higher and the ship, fire and
+    drones are all drawn larger — v1's top half was dead sky.)"""
+    # night sky with a gradient — darker at the top, lighter at the sea
+    for i in range(int(h * 0.55)):
+        t = i / (h * 0.55)
+        c = tuple(int((10, 14, 34)[j] * (1 - t) + (30, 40, 72)[j] * t)
+                  for j in range(3))
+        d.line([x, y + i, x + w, y + i], fill=c)
+    # stars, denser and brighter than v1, plus the moon (left of the
+    # white stat chip that the panel draws at top-right)
+    for i in range(70):
+        px = x + (i * 53) % int(w)
+        py = y + (i * 37) % int(h * 0.42)
+        d.point((px, py), fill=(225, 228, 242))
+        if i % 3 == 0:
+            d.point((px + 1, py), fill=(180, 186, 205))
+    d.ellipse([x + w * 0.78, y + h * 0.06, x + w * 0.78 + 20,
+               y + h * 0.06 + 20], fill=(232, 232, 210))
+    # sea from 55% down, with a moonlight band and wave flecks
+    d.rectangle([x, y + h * 0.55, x + w, y + h], fill=(24, 48, 84))
+    d.rectangle([x + w * 0.74, y + h * 0.55, x + w * 0.90, y + h],
+                fill=(52, 82, 122))
+    for i in range(26):
+        wx = x + (i * 97) % int(w * 0.96)
+        wy = y + h * 0.60 + (i * 29) % int(h * 0.36)
+        d.line([wx, wy, wx + 7, wy], fill=(90, 120, 160), width=1)
+    # warship (Merkury) centre-right, bigger than v1, listing, on fire
+    sx = x + w * 0.40
+    sy = y + h * 0.58
+    d.polygon([(sx, sy), (sx + w * 0.48, sy), (sx + w * 0.43, sy + h * 0.13),
+               (sx + w * 0.05, sy + h * 0.13)], fill=(56, 62, 70))
+    d.rectangle([sx + w * 0.12, sy - h * 0.22, sx + w * 0.26, sy],
+                fill=(74, 80, 88))
+    d.rectangle([sx + w * 0.29, sy - h * 0.15, sx + w * 0.35, sy],
+                fill=(74, 80, 88))
+    d.line([sx + w * 0.19, sy - h * 0.22, sx + w * 0.19, sy - h * 0.36],
+           fill=(96, 102, 110), width=3)
+    d.line([sx + w * 0.19, sy - h * 0.36, sx + w * 0.27, sy - h * 0.30],
+           fill=(96, 102, 110), width=2)
+    # fireball + flame over the superstructure, roughly double v1's
+    fx, fy = sx + w * 0.19, sy - h * 0.30
+    d.ellipse([fx - 27, fy - 19, fx + 27, fy + 19], fill=(255, 170, 50))
+    d.ellipse([fx - 15, fy - 11, fx + 15, fy + 11], fill=(255, 220, 120))
+    d.polygon([(fx - 16, fy - 12), (fx, fy - 42), (fx + 16, fy - 12)],
               fill=(240, 110, 36))
-    for (ox, oy, orr) in [(0.10, 0.18, 10), (0.20, 0.12, 14), (0.28, 0.08, 18)]:
+    d.polygon([(fx - 7, fy - 10), (fx + 2, fy - 30), (fx + 8, fy - 10)],
+              fill=(255, 190, 80))
+    # firelight reflected on the water under the ship
+    for k in range(3):
+        ry = sy + h * (0.17 + 0.05 * k)
+        d.line([fx - 22 + k * 5, ry, fx + 22 - k * 5, ry],
+               fill=(200, 110, 50), width=2)
+    # smoke plume rising from the fire, drifting right
+    for (ox, oy, orr) in [(0.62, 0.30, 11), (0.68, 0.22, 15),
+                          (0.75, 0.15, 19), (0.83, 0.10, 23)]:
         d.ellipse([x + w * ox - orr, y + h * oy - orr * 0.6,
                    x + w * ox + orr, y + h * oy + orr * 0.6],
-                  fill=(70, 64, 70, 170))
-    # sea drones closing in from the left, with wakes
-    for (dx, dy, s) in [(0.08, 0.74, 1.0), (0.20, 0.82, 0.8), (0.30, 0.70, 0.9)]:
+                  fill=(74, 68, 74, 175))
+    # sea drones closing in from the left — four boats, larger, with
+    # foam wakes (the story says seven; three more are distant dots)
+    for (dx, dy, s) in [(0.05, 0.72, 1.35), (0.17, 0.85, 1.15),
+                        (0.28, 0.66, 1.25), (0.36, 0.79, 1.0)]:
         bx, by = x + w * dx, y + h * dy
-        d.line([bx - 34 * s, by + 6, bx, by], fill=(200, 220, 240), width=2)
-        d.polygon([(bx, by - 4), (bx + 18 * s, by), (bx, by + 4)],
-                  fill=(16, 16, 20))
-        d.ellipse([bx + 14 * s - 2, by - 2, bx + 14 * s + 2, by + 2],
+        d.line([bx - 46 * s, by + 7, bx, by], fill=(200, 220, 240), width=2)
+        d.line([bx - 30 * s, by + 11, bx - 4, by + 3],
+               fill=(150, 180, 210), width=1)
+        d.polygon([(bx, by - 6), (bx + 26 * s, by), (bx, by + 6)],
+                  fill=(14, 14, 18))
+        d.ellipse([bx + 20 * s - 3, by - 3, bx + 20 * s + 3, by + 3],
                   fill=(255, 90, 60))
+    for (dx, dy) in [(0.47, 0.90), (0.55, 0.86), (0.62, 0.92)]:
+        bx, by = x + w * dx, y + h * dy
+        d.line([bx - 16, by + 3, bx, by], fill=(170, 195, 220), width=1)
+        d.ellipse([bx - 3, by - 2, bx + 3, by + 2], fill=(20, 20, 26))
 
 
 LEAD_SCENES = {"cop31": scene_cop31, "nato": scene_nato,
@@ -820,11 +867,21 @@ CONTINENTS = [
       (77, 8), (73, 16), (68, 23), (62, 25), (57, 25), (53, 26),
       (48, 30), (44, 29), (41, 29), (36, 36), (33, 39), (26, 41),
       (26, 38)], "ASIA"),
-    ([(114, -22), (114, -32), (115, -35), (118, -35), (124, -33),
-      (130, -32), (133, -32), (137, -35), (140, -38), (145, -38),
-      (150, -37), (153, -32), (153, -27), (150, -22), (146, -19),
-      (142, -15), (142, -11), (136, -12), (132, -11), (127, -14),
-      (122, -17), (118, -20), (114, -22)], "AUSTRALIA"),
+    # (v2: fuller outline — Cape York spike, the southern bights and
+    # the Tasmanian + New Zealand landmasses that v1 left off entirely)
+    ([(114, -22), (113, -26), (115, -33), (118, -35), (124, -33),
+      (130, -32), (132, -32), (135, -35), (137, -35), (139, -37),
+      (140, -38), (145, -38), (147, -38), (150, -37), (153, -32),
+      (153, -27), (151, -24), (149, -20), (146, -19), (143, -15),
+      (142, -11), (141, -13), (142, -17), (140, -18), (136, -15),
+      (136, -12), (133, -12), (130, -13), (126, -14), (122, -17),
+      (118, -20), (114, -22)], "AUSTRALIA"),
+    ([(145, -41), (148, -41), (148, -43), (146, -44), (144, -43),
+      (145, -41)], "AUSTRALIA"),
+    ([(173, -35), (176, -37), (178, -38), (177, -40), (175, -41),
+      (174, -40), (173, -37), (173, -35)], "NEW ZEALAND"),
+    ([(168, -46), (170, -45), (172, -44), (174, -42), (173, -41),
+      (171, -42), (169, -43), (167, -45), (168, -46)], "NEW ZEALAND"),
 ]
 
 # Pin positions (lon, lat) — all on land, verified against a real map.
@@ -853,8 +910,10 @@ MAP_LAT = (78.0, -57.0)
 
 # Pins drawn with a pixel offset + leader line (their true spot is
 # crowded by a neighbour's disc): 1 Antalya (crowded by 5 Gaza),
-# 11 New York (crowded by 12 Washington DC).
-PIN_OFFSETS = {1: (20, 6), 11: (14, -12)}
+# 11 New York (crowded by 12 Washington DC), 2 Brussels (crowded by
+# 9 Copenhagen) and 8 Moscow (crowded by 10 Dymer) — the last two are
+# v2 additions; the discs also shrank from r7 to r6.5 for the cluster.
+PIN_OFFSETS = {1: (20, 6), 2: (-13, -9), 8: (11, -9), 11: (14, -12)}
 
 
 def draw_map(mx, my, mw, mh):
@@ -885,14 +944,16 @@ def draw_map(mx, my, mw, mh):
             d.line([px, py, px + ox, py + oy], fill=(255, 255, 255),
                    width=1)
             px, py = px + ox, py + oy
-        d.ellipse([px - 7, py - 7, px + 7, py + 7], fill=col,
+        d.ellipse([px - 6.5, py - 6.5, px + 6.5, py + 6.5], fill=col,
                   outline=(255, 255, 255), width=2)
         ns = str(num)
         f = F(SANS_BLACK, 8)
         d.text((px - tw(ns, f) / 2, py - 5), ns, font=f, fill=(255, 255, 255))
     # caption INSIDE the map, on a solid strip (Patagonia's dots reach
-    # the bottom edge and would cross the text otherwise)
-    d.rectangle([mx, my + mh - 16, mx + mw, my + mh], fill=NAVY_DARK)
+    # the bottom edge and would cross the text otherwise). The strip
+    # spans only the left ~62% in v2 so the New Zealand dots at the
+    # bottom-right stay visible.
+    d.rectangle([mx, my + mh - 16, mx + mw * 0.62, my + mh], fill=NAVY_DARK)
     d.text((mx + 6, my + mh - 12),
            "WHERE THE NEWS IS  ·  13 PICTURED STORIES PINNED",
            font=F(SANS, 8), fill=(200, 204, 220))
@@ -902,8 +963,8 @@ def draw_map(mx, my, mw, mh):
 # ------------------------------------------------------------------ page
 # Vertical budget (proven on ni22): masthead 0–24 · headline 30–88 ·
 # strap rules 100/138 · stats 146–192 · region bar 196–216 · UTC 224–238
-# · leads 254–540 · cards 540/662 · bottom 794–960 · DATE CHECK 966–1008
-# · footer 1012.
+# · leads 254–540 · cards 540/662 · bottom 788–954 · DATE CHECK 962–1008
+# · footer 1013.
 def header():
     d.rectangle([0, 0, W, 24], fill=NAVY_DARK)
     centre("THE WORLD IN ONE DAY · 36 STORIES · 6 REGIONS · EVERY ONE "
@@ -1047,7 +1108,7 @@ def card(i, x, y, cnum, tag, stat, place, label, head, body, source, scene):
 
 
 def bottom():
-    y = 794
+    y = 788
     d.text((M, y), "WHERE IT HAPPENED", font=F(SANS_BLACK, 11), fill=NAVY)
     mw = tw("WHERE IT HAPPENED", F(SANS_BLACK, 11))
     d.text((M + mw + 8, y + 2), "pins match story numbers",
@@ -1066,10 +1127,20 @@ def bottom():
         col = 0 if j < 12 else 1
         row = j if j < 12 else j - 12
         bx = ax + col * (col_w + 12)
-        by = y + 18 + row * 12.5
+        by = y + 17 + row * 13.0
         d.text((bx, by), f"{num}", font=nf, fill=RED)
         tx = bx + tw(f"{num}", nf) + 5
-        suffix = f" ({source}" + (f" · {label})" if label else ")")
+        # suffix: " (SOURCE)", " (SOURCE · LABEL)", " (LABEL)", or
+        # nothing — briefs 23/33 carry no parenthetical in v2 (their
+        # v1 credit, "GEORGE", was a byline and read as a typo)
+        if source and label:
+            suffix = f" ({source} · {label})"
+        elif source:
+            suffix = f" ({source})"
+        elif label:
+            suffix = f" ({label})"
+        else:
+            suffix = ""
         full = text + suffix
         if tw(full, tf) > col_w - (tx - bx):
             WARNINGS.append(f"brief {num} too wide: {tw(full, tf):.0f}px "
@@ -1079,11 +1150,14 @@ def bottom():
 
 
 def date_check():
-    y = 966
+    # v2: the box starts 4 px higher and the text starts 2 px higher
+    # inside it, so the second line clears the bottom border by ~7 px
+    # (v1: ~1 px) and the footer below gets a 5 px gap (v1: 4 px)
+    y = 962
     d.rectangle([M, y, M + CW, 1008], outline=RED, width=2)
     d.text((M + 10, y + 6), "DATE CHECK — CHECKED, AND LEFT OUT ON PURPOSE",
            font=F(SANS_BLACK, 11), fill=RED)
-    text_block(M + 10, y + 21, DATE_CHECK, F(SANS, 9), CW - 20, 10.5,
+    text_block(M + 10, y + 19, DATE_CHECK, F(SANS, 9), CW - 20, 10.5,
                fill=(40, 40, 44), max_lines=2)
 
 
@@ -1100,8 +1174,8 @@ def main():
         card(j, M + col * 196, 540 + row * 122, *c)
     bottom()
     date_check()
-    # footer: one short line squeezed under the date-check box
-    centre(FOOTER, W / 2, 1012, fit(FOOTER, SANS, 8, CW), fill=GREY)
+    # footer: one short line under the date-check box
+    centre(FOOTER, W / 2, 1013, fit(FOOTER, SANS, 8, CW), fill=GREY)
     if max(ends) > 540:
         WARNINGS.append(f"lead text ends at {max(ends)} > 540")
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)),

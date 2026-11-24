@@ -14,6 +14,18 @@ side's claim, unverified · **FORECAST** = scheduled, has not happened yet.
 Research: browser search, 23 November 2026 (all times UTC unless noted),
 plus Just Security Early Edition, 23 November 2026 (read in full).
 
+**v2 presentation notes (24 November 2026).** The v2 image carries the
+same 36 stories and labels; only presentation changed after a pixel
+audit of v1: (a) the stat strip now shows Bitcoin at $61,417 — the
+06:27 UTC print the timeline already carried — instead of the $61,300
+in Morningstar's earlier copy, so the page no longer shows two
+figures; (b) briefs 23 and 33 are printed without a source
+parenthetical — their credit "GEORGE" is a byline, not an outlet, and
+read as a typo on the page (the audit table below keeps it for the
+record); (c) briefs 28 and 36 are shortened on the image only
+("Libya: Merkury refuelling under deal", "Tripoli: 'grave concern'
+over ports") so the right-hand column clears the page margin.
+
 ---
 
 ## Leads (1–3)

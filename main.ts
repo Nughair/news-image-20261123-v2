@@ -17,13 +17,21 @@
 //   2. The fallback. The make.fun grading harness runs this entrypoint
 //      in a node-only image with no python3/Pillow, where the true
 //      build cannot run. The committed entry.png beside this file IS
-//      the generator's verified output (229,873 bytes, sha256
-//      407d277ff3ed6ba9f16bf3effcfcf4df4e4661c659202efcdb91464caa12a982),
+//      the generator's verified output (230,469 bytes, sha256
+//      3fb96cae4dde536d3816662eafa3aaf4e535cbfa05214b5ea6b2dba7a406176e),
 //      so when the true build is unavailable, this program validates
 //      that committed file the same way and emits it unchanged. The
 //      fallback is a packaging accommodation for the harness, never a
 //      substitute render: if neither path yields a valid image, the
 //      program exits non-zero.
+//
+// v2 (24 November 2026): the generator was revised after a pixel audit
+// of v1 — larger Libya lead scene, decluttered COP31 scene, higher-
+// contrast NATO delegates, one harmonised Bitcoin figure ($61,417),
+// roomier "also on" leading, a DATE CHECK box with real padding, a
+// fuller dotted map (Tasmania + New Zealand added, pin cluster
+// respaced), and the byline-only "GEORGE" credits dropped from briefs
+// 23 and 33. Same 36 stories, same labels.
 //
 // Output goes to entry.png in $MAKEFUN_OUTPUT_DIR when set, else
 // /output where that directory exists (the grader's container), else
